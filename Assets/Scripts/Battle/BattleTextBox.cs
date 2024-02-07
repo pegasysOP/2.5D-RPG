@@ -8,8 +8,8 @@ using UnityEngine.UI;
 // The text/selection box displayed at the bottom of the battle environment
 public class BattleTextBox : MonoBehaviour
 {
-    [SerializeField] TMP_Text textBox;
-    [SerializeField] List<TMP_Text> buttonTexts;
+    [SerializeField] TextMeshProUGUI textBox;
+    [SerializeField] List<TextMeshProUGUI> buttonTexts;
 
     public UnityEvent<int> OnButtonPressed = new UnityEvent<int>();
 

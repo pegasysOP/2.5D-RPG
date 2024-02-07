@@ -7,9 +7,8 @@ using UnityEngine.UI;
 // The display for a Battler in the battle environment
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] TMP_Text nameText;
-    [SerializeField] TMP_Text hpText;
-    [SerializeField] Image image; // TODO: Need front and back sprites for player vs enemy POV
+    [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] bool isPlayer;
 
     public Battler Battler { get; private set; }
@@ -20,8 +19,7 @@ public class BattleUnit : MonoBehaviour
         this.Battler = battler;
 
         Name = battler.Name;
-        HP = battler.HP.ToString();
-        Sprite = battler.Sprite;
+        HP = "HP: " + battler.HP.ToString();
 
         UpdateHP();
     }
@@ -30,7 +28,7 @@ public class BattleUnit : MonoBehaviour
     {
         if (Battler != null)
         {
-            HP = Battler.HP.ToString();
+            HP = "HP: " + Battler.HP.ToString();
         }
     }
 
@@ -59,12 +57,6 @@ public class BattleUnit : MonoBehaviour
     {
         get { return hpText.text; }
         set { hpText.text = value; }
-    }
-
-    public Sprite Sprite
-    {
-        get { return image.sprite; }
-        set { image.sprite = value; }
     }
 
     public bool IsPlayer
