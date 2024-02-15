@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
     Direction direction;
     bool movementEnabled = true;
 
-    UnityEvent<GameObject> _OnInteraction = new UnityEvent<GameObject>();
+    UnityEvent<IOverworldInteractable> _OnInteraction = new UnityEvent<IOverworldInteractable>();
+    public UnityEvent<IOverworldInteractable> OnInteraction { get { return _OnInteraction; } }
 
     public void Update()
     {
@@ -98,10 +99,11 @@ public class PlayerController : MonoBehaviour
             if (result != null)
             {
                 GameObject interactedObject = result.gameObject;
-        
-                if (interactedObject.GetComponent<Interactable>() != null)
+
+                IOverworldInteractable interactable = interactedObject.GetComponent<IOverworldInteractable>();
+                if (interactable != null)
                 {
-                    OnInteraction.Invoke(interactedObject);
+                    OnInteraction.Invoke(interactable);
                     return interactedObject;
                 }
             }
@@ -125,15 +127,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     // Enable or disable the players movement
     public void EnableMovement(bool enabled)
     {
         this.movementEnabled = enabled;
-    }
-
-    public UnityEvent<GameObject> OnInteraction
-    {
-        get { return _OnInteraction; }
     }
 }

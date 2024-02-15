@@ -11,14 +11,15 @@ public class BattleManager : MonoBehaviour
     enum BattleState { Starting, ActionSelection, AttackSelection, PlayerMove, EnemyMove, Ending }
     BattleState battleState;
 
-    [SerializeField] BattleUnit playerUnit;
-    [SerializeField] BattleUnit enemyUnit;
-    [SerializeField] BattleTextBox bottomBox;
+    [SerializeField] private GameObject battleHud;
+    [SerializeField] private BattleUnit playerUnit;
+    [SerializeField] private BattleUnit enemyUnit;
+    [SerializeField] private BattleTextBox bottomBox;
 
     [System.NonSerialized] public UnityEvent<bool> OnBattleOver = new UnityEvent<bool>();
     [System.NonSerialized] public UnityEvent OnBattleRun = new UnityEvent();
 
-    BattlerParty playerParty;
+    [SerializeField] BattlerParty playerParty;
     BattlerParty enemyParty;
 
     private void Awake()
@@ -27,9 +28,8 @@ public class BattleManager : MonoBehaviour
     }
 
     // Initialise the battle environment ready for the start of a new battle
-    void Init(BattlerParty playerParty, BattlerParty enemyParty)
+    void Init(BattlerParty enemyParty)
     {
-        this.playerParty = playerParty;
         this.enemyParty = enemyParty;
 
         Battler player = playerParty.GetNextBattler();
@@ -40,15 +40,15 @@ public class BattleManager : MonoBehaviour
 
         playerUnit.SetDisplay(player);
         enemyUnit.SetDisplay(enemy);
-
     }
 
     // Initiates a new battle between the player, and the enemy
-    public IEnumerator StartBattle(BattlerParty playerParty, BattlerParty enemyParty)
+    public IEnumerator StartBattle(BattlerParty enemyParty)
     {
         battleState = BattleState.Starting;
-        Init(playerParty, enemyParty);
+        Init(enemyParty);
 
+        battleHud.SetActive(true);
         bottomBox.ClearButtonTexts();
         yield return bottomBox.WriteToBottomText($"You encountered a {enemyUnit.Battler.Name}!");
         yield return new WaitForSeconds(2f);
@@ -137,6 +137,7 @@ public class BattleManager : MonoBehaviour
 
             // TODO: Check if enemy team has any other remaining battlers (each side only has one for now)
 
+            battleHud.SetActive(false);
             OnBattleOver.Invoke(sourceBU.IsPlayer); 
         }
         else
@@ -153,6 +154,7 @@ public class BattleManager : MonoBehaviour
         yield return bottomBox.WriteToBottomText($"You ran away from the battle");
         yield return new WaitForSeconds(2f);
 
+        battleHud.SetActive(false);
         OnBattleRun.Invoke();
     }
 
