@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     enum GameState { Overworld, Battle }
 
     [Header("Cameras")]
+    [SerializeField] CinemachineBrain cameraBrain;
     [SerializeField] CinemachineVirtualCamera overworldCam;
     [SerializeField] CinemachineVirtualCamera battleCam;
 
@@ -72,14 +73,16 @@ public class GameManager : MonoBehaviour
 
         if (state == GameState.Overworld)
         {
-            overworldCam.enabled = true;
-            battleCam.enabled = false;
+            overworldCam.Priority = 100;
+            battleCam.Priority = 0;
+            cameraBrain.ActiveBlend = null;
             player.EnableMovement(true);
         }
         else if (state == GameState.Battle)
         {
-            overworldCam.enabled = false;
-            battleCam.enabled = true;
+            battleCam.Priority = 1000;
+            overworldCam.Priority = 0;
+            cameraBrain.ActiveBlend = null;
             player.EnableMovement(false);
         }
     }
