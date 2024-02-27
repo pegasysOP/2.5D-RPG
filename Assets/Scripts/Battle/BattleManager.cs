@@ -12,15 +12,21 @@ public class BattleManager : MonoBehaviour
     BattleState battleState;
 
     [SerializeField] private GameObject battleHud;
-    [SerializeField] private BattleUnit playerUnit;
-    [SerializeField] private BattleUnit enemyUnit;
     [SerializeField] private BattleTextBox bottomBox;
+
+    [Header("Player")]
+    [SerializeField] private BattleUnit playerUnit;
+    [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] BattlerParty playerParty;
+
+    [Header("Enemy")]
+    [SerializeField] private BattleUnit enemyUnit;
+    [SerializeField] private SpriteRenderer enemySprite;
+    private BattlerParty enemyParty;
 
     [System.NonSerialized] public UnityEvent<bool> OnBattleOver = new UnityEvent<bool>();
     [System.NonSerialized] public UnityEvent OnBattleRun = new UnityEvent();
 
-    [SerializeField] BattlerParty playerParty;
-    BattlerParty enemyParty;
 
     private void Awake()
     {
@@ -40,6 +46,9 @@ public class BattleManager : MonoBehaviour
 
         playerUnit.SetDisplay(player);
         enemyUnit.SetDisplay(enemy);
+
+        playerSprite.sprite = player.Sprite;
+        enemySprite.sprite = enemy.Sprite;
     }
 
     // Initiates a new battle between the player, and the enemy
